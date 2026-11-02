@@ -9,8 +9,8 @@ builder.Services.AddOpenApi();
 var password = Environment.GetEnvironmentVariable("SA_PASSWORD");
 var redisPassword = Environment.GetEnvironmentVariable("REDIS_PASSWORD");
 builder.Services.AddHealthChecks()
-.AddSqlServer($"Server=localhost,1433;Database=master;User Id=sa;Password=Admin1234!;TrustServerCertificate=True")
-.AddRedis($"localhost:6379,password=Admin1234!");
+.AddSqlServer(builder.Configuration.GetConnectionString("SqlServer")!)
+.AddRedis(builder.Configuration.GetConnectionString("Redis")!);
 
 var app = builder.Build();
 

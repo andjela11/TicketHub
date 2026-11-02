@@ -5,4 +5,8 @@
     <Project Path="src/TicketHub.Domain/TicketHub.Domain.csproj" />
     <Project Path="src/TicketHub.Infrastructure/TicketHub.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/TicketHub.Api.IntegrationTests/TicketHub.Api.IntegrationTests.csproj" />
+    <Project Path="tests/TicketHub.Domain.Tests/TicketHub.Domain.Tests.csproj" />
+  </Folder>
 </Solution>
