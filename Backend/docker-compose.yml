@@ -19,7 +19,7 @@ services:
         - "localhost"
         - "-U"
         - "sa"
-        - "-p"
+        - "-P"
         - "${SA_PASSWORD}"
         - "-Q"
         - "SELECT 1"
