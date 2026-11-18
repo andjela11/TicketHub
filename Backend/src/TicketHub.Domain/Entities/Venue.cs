@@ -45,6 +45,12 @@ public class Venue
             throw new DomainException("Time zone cannot be empty.");
         }
 
+        timeZoneId = timeZoneId.Trim();
+        if(!TimeZoneInfo.TryFindSystemTimeZoneById(timeZoneId, out _))
+        {
+            throw new DomainException("Time zone is not valid.");
+        }
+
         return new Venue(name, address, capacity, timeZoneId);
     }
 }

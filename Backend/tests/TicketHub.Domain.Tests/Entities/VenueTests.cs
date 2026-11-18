@@ -10,7 +10,7 @@ public class VenueTests
     {
         //Arange
         string name = "Comique";
-        Address address = Address.CreateAddress("Paris", "France", "75002", "1 Place Boieldieu");
+        Address address = Address.CreateAddress("1 Place Boieldieu", "Paris", "75002", "France");
         int capacity = 300;
         string timeZoneId = "Europe/Paris";
 
@@ -28,7 +28,7 @@ public class VenueTests
     {
         //Arange
         string name = "Comique";
-        Address address = Address.CreateAddress("Paris", "France", "75002", "1 Place Boieldieu");
+        Address address = Address.CreateAddress("1 Place Boieldieu", "Paris", "75002", "France");
         int capacity = -6;
         string timeZoneId = "Europe/Paris";
 
@@ -44,7 +44,7 @@ public class VenueTests
     {
         //Arange
         string name = "Co";
-        Address address = Address.CreateAddress("Paris", "France", "75002", "1 Place Boieldieu");
+        Address address = Address.CreateAddress("1 Place Boieldieu", "Paris", "75002", "France");
         int capacity = 300;
         string timeZoneId = "Europe/Paris";
 
@@ -60,7 +60,7 @@ public class VenueTests
     {
         //Arange
         string name = "Comique";
-        Address address = Address.CreateAddress("Paris", "France", "75002", "1 Place Boieldieu");
+        Address address = Address.CreateAddress("1 Place Boieldieu", "Paris", "75002", "France");
         int capacity = 300;
         string timeZoneId = "";
 
@@ -75,7 +75,7 @@ public class VenueTests
     {
         //Arange
         string name = "Comique";
-        Address address = null;
+        Address address = null!;
         int capacity = 300;
         string timeZoneId = "Europe/Paris";
 
@@ -84,5 +84,20 @@ public class VenueTests
         Venue.CreateVenue(name, address, capacity, timeZoneId));
         Assert.Equal("Address cannot be null", exception.Message);
         
+    }
+
+    [Fact]
+    public void CreateVenue_WithInvalidTimeZoneId_ShouldThrowException()
+    {
+        //Arange
+        string name = "Comique";
+        Address address = Address.CreateAddress("1 Place Boieldieu", "Paris", "75002", "France");
+        int capacity = 300;
+        string timeZoneId = "Mars/Olympus";
+
+        //Act & Assert
+        var exception = Assert.Throws<DomainException>(() => 
+        Venue.CreateVenue(name, address, capacity, timeZoneId));
+        Assert.Equal("Time zone is not valid.", exception.Message);
     }
 }

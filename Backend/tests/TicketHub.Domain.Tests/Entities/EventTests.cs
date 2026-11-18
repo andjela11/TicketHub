@@ -93,6 +93,90 @@ public class EventTests
     }
 
     [Fact]
+    public void CreateEvent_WithEmptyStringForName_ShouldThrowDomainException()
+    {
+        //Arrange
+        string name = " ";
+        DateTime start = new DateTime(2036, 12, 25, 18, 0, 0);
+        DateTime end = new DateTime(2036, 12, 25, 21, 0, 0);
+        string venueName = "Comique";
+        Address address = Address.CreateAddress("1 Place Boieldieu", "Paris", "75002", "France");
+        int capacity = 300;
+        string timeZoneId = "Europe/Paris";
+        var venue = Venue.CreateVenue(venueName, address, capacity, timeZoneId);
+        Category category = Category.Theatre;
+        string description = "Some description";
+
+        //Act & Assert
+        var exception = Assert.Throws<DomainException>(() => 
+        Event.CreateEvent(name, start, end, venue, category, description));
+        Assert.Equal("Name can not be empty.", exception.Message);
+    }
+
+    [Fact]
+    public void CreateEvent_WithTooLongName_ShouldThrowDomainException()
+    {
+        //Arrange
+        string name = "The European languages are members of the same family. Their separate existence is a myth. Europe uses the same vocabulary. The languages only differ in their grammar, their pronunciation and their most common words.";
+        DateTime start = new DateTime(2036, 12, 25, 18, 0, 0);
+        DateTime end = new DateTime(2036, 12, 25, 21, 0, 0);
+        string venueName = "Comique";
+        Address address = Address.CreateAddress("1 Place Boieldieu", "Paris", "75002", "France");
+        int capacity = 300;
+        string timeZoneId = "Europe/Paris";
+        var venue = Venue.CreateVenue(venueName, address, capacity, timeZoneId);
+        Category category = Category.Theatre;
+        string description = "Some description";
+
+        //Act & Assert
+        var exception = Assert.Throws<DomainException>(() => 
+        Event.CreateEvent(name, start, end, venue, category, description));
+        Assert.Equal("Name has to be between 3 and 200 characters.", exception.Message);
+    }
+
+    [Fact]
+    public void CreateEvent_WithTooShortName_ShouldThrowDomainException()
+    {
+        //Arrange
+        string name = "a";
+        DateTime start = new DateTime(2036, 12, 25, 18, 0, 0);
+        DateTime end = new DateTime(2036, 12, 25, 21, 0, 0);
+        string venueName = "Comique";
+        Address address = Address.CreateAddress("1 Place Boieldieu", "Paris", "75002", "France");
+        int capacity = 300;
+        string timeZoneId = "Europe/Paris";
+        var venue = Venue.CreateVenue(venueName, address, capacity, timeZoneId);
+        Category category = Category.Theatre;
+        string description = "Some description";
+
+        //Act & Assert
+        var exception = Assert.Throws<DomainException>(() => 
+        Event.CreateEvent(name, start, end, venue, category, description));
+        Assert.Equal("Name has to be between 3 and 200 characters.", exception.Message);
+    }
+
+    [Fact]
+    public void CreateEvent_WithStartDateAndEndDateAreSame_ShouldThrowDomainException()
+    {
+        //Arrange
+        string name = "Moulin Rouge";
+        DateTime start = new DateTime(2036, 12, 25, 18, 0, 0);
+        DateTime end = new DateTime(2036, 12, 25, 18, 0, 0);
+        string venueName = "Comique";
+        Address address = Address.CreateAddress("1 Place Boieldieu", "Paris", "75002", "France");
+        int capacity = 300;
+        string timeZoneId = "Europe/Paris";
+        var venue = Venue.CreateVenue(venueName, address, capacity, timeZoneId);
+        Category category = Category.Theatre;
+        string description = "Some description";
+
+        //Act & Assert
+        var exception = Assert.Throws<DomainException>(() => 
+        Event.CreateEvent(name, start, end, venue, category, description));
+        Assert.Equal("End date has to be after start date", exception.Message);
+    }
+
+    [Fact]
     public void Publish_WhenEventStatusIsDraft_ShouldChangeEventStatusToPublished()
     {
         //Arrange
@@ -114,6 +198,29 @@ public class EventTests
 
         //Assert
         Assert.Equal(EventStatus.Published, newEvent.EventStatus);
+    }
+
+    [Fact]
+    public void Publish_WhenEventStatusIsPublished_ShouldThrowDomainException()
+    {
+        //Arrange
+        string name = "Moulin Rouge";
+        DateTime start = new DateTime(2036, 12, 25, 18, 0, 0);
+        DateTime end = new DateTime(2036, 12, 25, 21, 0, 0);
+        string venueName = "Comique";
+        Address address = Address.CreateAddress("1 Place Boieldieu", "Paris", "75002", "France");
+        int capacity = 300;
+        string timeZoneId = "Europe/Paris";
+        var venue = Venue.CreateVenue(venueName, address, capacity, timeZoneId);
+        Category category = Category.Theatre;
+        string description = "Some description";
+
+        var newEvent = Event.CreateEvent(name, start, end, venue, category, description);
+        newEvent.Publish();
+
+        //Act & Assert
+        var exception = Assert.Throws<DomainException>(() => newEvent.Publish());
+        Assert.Equal("Event cannot be published", exception.Message);
     }
 
     [Fact]
